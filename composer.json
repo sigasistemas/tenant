@@ -39,6 +39,9 @@
         "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
+        "files": [
+            "helpers.php"
+        ], 
         "psr-4": {
             "Callcocam\\Tenant\\": "src/",
             "Callcocam\\Tenant\\Database\\Factories\\": "database/factories/"

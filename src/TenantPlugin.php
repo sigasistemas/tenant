@@ -1,9 +1,11 @@
 <?php
+
 /**
-* Created by Claudio Campos.
-* User: callcocam@gmail.com, contato@sigasmart.com.br
-* https://www.sigasmart.com.br
-*/
+ * Created by Claudio Campos.
+ * User: callcocam@gmail.com, contato@sigasmart.com.br
+ * https://www.sigasmart.com.br
+ */
+
 namespace Callcocam\Tenant;
 
 use Filament\Contracts\Plugin;
@@ -18,7 +20,9 @@ class TenantPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        //
+        $panel->resources([
+            Resources\TenantResource::class,
+        ]);
     }
 
     public function boot(Panel $panel): void
