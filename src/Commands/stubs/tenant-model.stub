@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Created by Claudio Campos.
+ * User: callcocam@gmail.com, contato@sigasmart.com.br
+ * https://www.sigasmart.com.br
+ */
+
+namespace App\Models\Callcocam;
+
+use Callcocam\Tenant\Models\Tenant as ModelsTenant; 
+
+class Tenant extends ModelsTenant
+{ 
+
+  
+}
