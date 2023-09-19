@@ -68,6 +68,9 @@ class TenantServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->app->singleton(TenantManager::class, function () {
+            return new TenantManager();
+        });
     }
 
     public function packageBooted(): void

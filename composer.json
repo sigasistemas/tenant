@@ -23,7 +23,9 @@
         "php": "^8.1",
         "filament/filament": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0",
-        "illuminate/contracts": "^10.0"
+        "illuminate/contracts": "^10.0",
+        "leandrocfe/filament-ptbr-form-fields": "^3.0",
+        "owenvoke/blade-fontawesome": "^2.4"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
