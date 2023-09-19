@@ -16,12 +16,25 @@ You can install the package via composer:
 ```bash
 composer require callcocam/tenant
 ```
+Execute the command
+
+```bash
+php artisan app:tenant-install
+```
+Enable the tenant in config/tenant.php
+
+Run the command again
+
+```bash
+php artisan app:tenant-install
+```
+
+OR
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="tenant-migrations"
-php artisan migrate
+php artisan vendor:publish --tag="tenant-migrations" 
 ```
 
 You can publish the config file with:
@@ -36,19 +49,16 @@ Optionally, you can publish the views using
 php artisan vendor:publish --tag="tenant-views"
 ```
 
-This is the contents of the published config file:
 
-```php
-return [
-];
+Remember to install the plugin on Your Provider
+
 ```
-
-## Usage
-
-```php
-$tenant = new Callcocam\Tenant();
-echo $tenant->echoPhrase('Hello, Callcocam!');
-```
+use Callcocam\Tenant\TenantPlugin;
+ return $panel
+ ...
+->plugin(new TenantPlugin())
+...
+``
 
 ## Testing
 
