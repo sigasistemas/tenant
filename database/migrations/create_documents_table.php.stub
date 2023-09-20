@@ -22,7 +22,7 @@ return new class extends Migration
             return ;
         }
         Schema::create('documents', function (Blueprint $table) {
-            if (config('acl.incrementing', false)) {
+            if (config('tenant.incrementing', false)) {
                 $table->id();
                 $table->unsignedBigInteger('tenant_id')->nullable();
             } else {
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('icon', 255)->nullable()->comment('Icon ou imagem do documento');
             $table->enum('status', ['draft', 'published'])->default('published')->comment('Status do documento');
             $table->text('description')->nullable()->comment('Descrição do documento'); 
-            if (config('acl.incrementing', false)) {
+            if (config('tenant.incrementing', false)) {
                 $table->morphs('documentable');
             } else {
                 $table->ulidMorphs('documentable');               

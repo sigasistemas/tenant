@@ -13,4 +13,17 @@ return [
      * O nome da coluna no banco de dados que será usada para identificar o locatário
      */
     'default_tenant_columns'=>['tenant_id'],
+    /*
+    |--------------------------------------------------------------------------
+    | Use Uuids
+    |--------------------------------------------------------------------------
+    |
+    | Acl vem definida para usar chaves primárias incrementais por padrão. Se você
+    | deseja usar UUIDs em vez disso, atualize esta configuração para true.
+    | Você também precisará atualizar suas migrações para usar UUIDs.
+    */
+
+    'incrementing' => false,
+
+    'keyType' => 'string',
 ];

@@ -23,7 +23,7 @@ return new class extends Migration
             return ;
         }
         Schema::create('addresses', function (Blueprint $table) {
-            if (config('acl.incrementing', false)) {
+            if (config('tenant.incrementing', false)) {
                 $table->id();
                 $table->unsignedBigInteger('tenant_id')->nullable();
             } else {
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('longitude', 255)->nullable()->comment('Longitude do endereço');
             $table->enum('status', ['draft', 'published'])->default('published')->comment('Status do endereço');
             $table->text('description')->nullable()->comment('Descrição do endereço');
-            if (config('acl.incrementing', false)) {
+            if (config('tenant.incrementing', false)) {
                 $table->morphs('addressable');
             } else {
                 $table->ulidMorphs('addressable');               

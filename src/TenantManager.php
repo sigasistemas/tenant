@@ -204,8 +204,7 @@ class TenantManager
 
         $this->modelTenants($model)->each(function ($tenantId, $tenantColumn) use ($model) {
             if (!isset($model->{$tenantColumn})) {
-                $model->setAttribute($tenantColumn, $tenantId);
-                $model->setAttribute('user_id', auth()->id());
+                $model->setAttribute($tenantColumn, $tenantId); 
             }
         });
     }
