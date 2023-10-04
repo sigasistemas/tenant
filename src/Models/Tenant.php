@@ -8,12 +8,12 @@
 
  namespace Callcocam\Tenant\Models;
 
-use App\Models\Callcocam\AbstractModel;
+use App\Models\Callcocam\AbstractTenantModel;
 use Callcocam\Tenant\Traits\HasInfoModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Tenant extends AbstractModel
+class Tenant extends AbstractTenantModel
 {
     use HasFactory, Notifiable;
 
