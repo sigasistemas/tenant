@@ -61,7 +61,7 @@ class TenantCommand extends Command
 
             $this->info('Tenant model created successfully.');
             $this->info('Please enable the tenant in config/tenant.php');
-            $this->info('Please run "php artisan app:acl-tenant-install" to continue');
+            $this->info('Please run "php artisan app:tenant-install" to continue');
             return true;
         }
         if (!config('tenant.enabled')) {
