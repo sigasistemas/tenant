@@ -8,8 +8,8 @@
 
 namespace Callcocam\Tenant\Resources;
 
-use App\Models\Callcocam\Tenant;
-use  Callcocam\Tenant\Resources\TenantResource\RelationManagers; 
+use Callcocam\Tenant\Models\Tenant;
+use  Callcocam\Tenant\Resources\TenantResource\RelationManagers;
 use Callcocam\Tenant\Resources\TenantResource\Pages;
 use Callcocam\Tenant\Traits\HasDatesFormForTableColums;
 use Callcocam\Tenant\Traits\HasEditorColumn;
@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class TenantResource extends Resource
 {
@@ -29,7 +30,7 @@ class TenantResource extends Resource
     protected static ?string $model = Tenant::class;
 
     protected static ?string $navigationGroup = "Acl";
-    
+
     protected static ?string $modelLabel = "Locatário";
 
     protected static ?string $pluralModelLabel = "Locatários";
@@ -38,12 +39,52 @@ class TenantResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function getModel(): string
+    {
+        return config('tenant.models.tenant', Tenant::class);
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return config('acl.navigation.tenant.group', static::$navigationGroup);
+    }
+
+    public static function getNavigationIcon(): ?string
+    {
+        return config('acl.navigation.tenant.icon', static::$navigationIcon);
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return static::$navigationLabel ?? config('acl.navigation.tenant.label', Str::headline(static::getPluralModelLabel()));
+    }
+
+
+    public static function getNavigationBadge(): ?string
+    {
+        return config('acl.navigation.tenant.badge', null);
+    }
+
+    /**
+     * @return string | array{50: string, 100: string, 200: string, 300: string, 400: string, 500: string, 600: string, 700: string, 800: string, 900: string, 950: string} | null
+     */
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return config('acl.navigation.tenant.badge_color', null);
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return config('acl.navigation.tenant.sort', static::$navigationSort);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('type')
-                    ->label('Tipo de locatário')
+                    ->label(__('tenant::tenant.forms.type.label'))
+                    ->placeholder(__('tenant::tenant.forms.type.placeholder'))
                     ->options([
                         'tenant' => 'Tenant',
                         'landlord' => 'Landlord',
@@ -53,32 +94,36 @@ class TenantResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('name')
-                    ->label('Nome do locatário')
+                    ->label(__('tenant::tenant.forms.name.label'))
+                    ->placeholder(__('tenant::tenant.forms.name.placeholder'))
                     ->columnSpan([
                         'md' => 9,
                     ])
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('domain')
-                    ->label('Domínio do locatário')
+                    ->label(__('tenant::tenant.forms.domain.label'))
+                    ->placeholder(__('tenant::tenant.forms.domain.placeholder'))
                     ->columnSpan([
                         'md' => 6,
                     ])
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('provider')
-                    ->label('Provedor do locatário')
+                    ->label(__('tenant::tenant.forms.provider.label'))
+                    ->placeholder(__('tenant::tenant.forms.provider.placeholder'))
                     ->columnSpan([
                         'md' => 3,
                     ])
-                    ->helperText('Geralmente é o nome da conexão com o banco de dados')
+                    ->helperText(__('tenant::tenant.forms.provider.helperText'))
                     ->maxLength(255),
                 Forms\Components\TextInput::make('prefix')
-                    ->label('Prefixo do locatário')
+                    ->label(__('tenant::tenant.forms.prefix.label'))
+                    ->placeholder(__('tenant::tenant.forms.prefix.placeholder'))
                     ->columnSpan([
                         'md' => 3,
                     ])
-                    ->helperText('Geralmente é o path de acesso ao locatário ex: /admin')
+                    ->helperText(__('tenant::tenant.forms.prefix.helperText'))
                     ->maxLength(255),
                 static::getStatusFormRadioField(),
                 static::getEditorFormField()
@@ -88,17 +133,17 @@ class TenantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->modelLabel('Locatário')
-        ->pluralModelLabel('Locatários')
+            ->modelLabel(__('tenant::tenant.modelLabel'))
+            ->pluralModelLabel(__('tenant::tenant.pluralModelLabel'))
             ->columns([
                 Tables\Columns\TextColumn::make('type')
-                    ->label('Tipo de locatário')
+                    ->label(__('tenant::tenant.forms.type.label'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nome do locatário')
+                    ->label(__('tenant::tenant.forms.name.label'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('domain')
-                    ->label('Domínio do locatário')
+                    ->label(__('tenant::tenant.forms.domain.label'))
                     ->searchable(),
                 static::getStatusTableIconColumn(),
                 ...static::getFieldDatesFormForTable()
@@ -110,41 +155,54 @@ class TenantResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                Tables\Actions\BulkActionGroup::make(
+                    config('tenant.actions.tenant.bulk', [
+                        Tables\Actions\DeleteBulkAction::make(),
+                        Tables\Actions\ForceDeleteBulkAction::make(),
+                        Tables\Actions\RestoreBulkAction::make(),
+                    ])
+                ),
             ])
-            ->emptyStateActions([
+            ->emptyStateActions(config('tenant.actions.tenant.emptyState', [
                 Tables\Actions\CreateAction::make(),
-            ]);
+            ]));
     }
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\AddressesRelationManager::class,
-            RelationManagers\ContactsRelationManager::class,
-            RelationManagers\DocumentsRelationManager::class,
-            RelationManagers\SocialsRelationManager::class,
-        ];
+
+        $relations = [];
+
+        if (config('tenant.relations.tenant.address',  true)) {
+            $relations[] = RelationManagers\AddressesRelationManager::class;
+        }
+        if (config('tenant.relations.tenant.contact',  true)) {
+            $relations[] = RelationManagers\ContactsRelationManager::class;
+        }
+        if (config('tenant.relations.tenant.document',  true)) {
+            $relations[] = RelationManagers\DocumentsRelationManager::class;
+        }
+        if (config('tenant.relations.tenant.social',  true)) {
+            $relations[] = RelationManagers\SocialsRelationManager::class;
+        }
+
+        return config('tenant.relations.tenant', [...$relations]);
     }
 
     public static function getPages(): array
     {
-        return [
+        return config('tenant.pages.tenant', [
             'index' => Pages\ListTenants::route('/'),
             'create' => Pages\CreateTenant::route('/create'),
             'edit' => Pages\EditTenant::route('/{record}/edit'),
-        ];
+        ]);
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
+            ->withoutGlobalScopes(config('tenant.scopes.tenant', [
                 SoftDeletingScope::class,
-            ])->where('id', get_tenant_id());
+            ]))->where('id', get_tenant_id());
     }
 }

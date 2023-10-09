@@ -7,8 +7,7 @@
  */
 
 namespace Callcocam\Tenant;
-
-use App\Models\Callcocam\Tenant;
+ 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -22,6 +21,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Callcocam\Tenant\Commands\TenantCommand;
 use Callcocam\Tenant\Facades\Tenant as FacadesTenant;
+use Callcocam\Tenant\Models\Tenant;
 use Callcocam\Tenant\Testing\TestsTenant;
 
 class TenantServiceProvider extends PackageServiceProvider

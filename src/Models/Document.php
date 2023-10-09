@@ -5,11 +5,10 @@
 * https://www.sigasmart.com.br
 */
  namespace Callcocam\Tenant\Models;
-
-use App\Models\Callcocam\AbstractModel;
+ 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Document extends AbstractModel
+class Document extends AbstractTenantModel
 {
     use HasFactory;
     

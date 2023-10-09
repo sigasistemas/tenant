@@ -7,11 +7,10 @@
  */
 
  namespace Callcocam\Tenant\Models;
-
-use App\Models\Callcocam\AbstractModel;
+ 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Contact extends AbstractModel
+class Contact extends AbstractTenantModel
 {
     use HasFactory;
 
