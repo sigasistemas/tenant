@@ -8,12 +8,13 @@
 
 namespace Callcocam\Tenant\Models;
 
+use Callcocam\Profile\Traits\HasProfileModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AbstractTenantModel extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasProfileModel;
 
     public function __construct(array $attributes = [])
     {

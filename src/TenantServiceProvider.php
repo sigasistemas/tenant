@@ -165,10 +165,6 @@ class TenantServiceProvider extends PackageServiceProvider
     {
         return [
             'create_tenant_table',
-            'create_addresses_table',
-            'create_contacts_table',
-            'create_documents_table',
-            'create_socials_table',
         ];
     }
 

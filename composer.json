@@ -1,10 +1,15 @@
 {
     "name": "callcocam/tenant",
-    "description": "This is my package tenant",
+    "description": "This is my package tenant filament v3 for laravel",
     "keywords": [
         "callcocam",
         "laravel",
-        "tenant"
+        "tenant",
+        "filament",
+        "filament-admin",
+        "filament-admin-panel",
+        "filament-admin-dashboard", 
+        "filament-v3"
     ],
     "homepage": "https://github.com/callcocam/tenant",
     "support": {
@@ -38,7 +43,9 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "spatie/laravel-ray": "^1.26",
+        "callcocam/profile": "dev-main",
+        "callcocam/tall-sluggable": "dev-main"
     },
     "autoload": {
         "files": [

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('name', 255)->comment('Razão social do tenant');
             $table->string('slug')->nullable()->unique();
             $table->string('email')->unique()->comment('Email do tenant');
-            $table->string('domain')->unique()->comment('Dominio do tenant');
+            $table->string('domain')->unique()->comment('Domínio do tenant');
             $table->string('provider')->nullable()->comment('Conexão do tenant, qual base de dados ele vai usar');
             $table->string('prefix')->nullable()->comment('Path para acessar o tenant, ex: http://dominio/tenant');
             $table->enum('status', ['draft', 'published'])->default('published')->comment('Status do tenant');
@@ -34,7 +34,7 @@ return new class extends Migration
             if (config('tenant.incrementing', false)) {
                 $table->unsignedBigInteger('tenant_id')->nullable();
             } else {
-                $table->uuid('tenant_id')->nullable()->after('id');
+                $table->ulid('tenant_id')->nullable()->after('id');
             }
         });
     }

@@ -9,7 +9,7 @@
 namespace Callcocam\Tenant\Resources;
 
 use Callcocam\Tenant\Models\Tenant;
-use  Callcocam\Tenant\Resources\TenantResource\RelationManagers;
+use Callcocam\Profile\Resources\RelationManagers;
 use Callcocam\Tenant\Resources\TenantResource\Pages;
 use Callcocam\Tenant\Traits\HasDatesFormForTableColums;
 use Callcocam\Tenant\Traits\HasEditorColumn;
