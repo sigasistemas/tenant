@@ -8,7 +8,7 @@
 
 namespace Callcocam\Tenant\Commands;
 
-use App\Models\Callcocam\Tenant;
+use Callcocam\Tenant\Models\Tenant;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -22,48 +22,7 @@ class TenantCommand extends Command
     {
         $this->info('Installing Filament Acl tenant');
 
-        $this->call('vendor:publish', [
-            '--tag' => 'tenant-config',
-        ]);
-        $this->call('vendor:publish', [
-            '--tag' => 'tenant-migrations',
-        ]);
-        $this->call('vendor:publish', [
-            '--tag' => 'tenant-translations',
-        ]);
-
-        if (!is_dir(app_path('Models/Callcocam'))) {
-            File::makeDirectory(app_path('Models/Callcocam'), 0755, true);
-        }
-
-        if (!class_exists('App\Models\Callcocam\AbstractTenantModel')) {
-            File::put(app_path('Models/Callcocam/AbstractTenantModel.php'), file_get_contents(__DIR__ . '/stubs/abstract-model.stub'));
-        }
-
-        if (!class_exists('App\Models\Callcocam\Tenant')) {
-            File::put(app_path('Models/Callcocam/Tenant.php'), file_get_contents(__DIR__ . '/stubs/tenant-model.stub'));
-
-            if (!class_exists('App\Models\Callcocam\Address')) {
-                File::put(app_path('Models/Callcocam/Address.php'), file_get_contents(__DIR__ . '/stubs/address-model.stub'));
-            }
-            if (!class_exists('App\Models\Callcocam\Contact')) {
-                File::put(app_path('Models/Callcocam/Contact.php'), file_get_contents(__DIR__ . '/stubs/contact-model.stub'));
-            }
-            if (!class_exists('App\Models\Callcocam\Document')) {
-                File::put(app_path('Models/Callcocam/Document.php'), file_get_contents(__DIR__ . '/stubs/document-model.stub'));
-            }
-            if (!class_exists('App\Models\Callcocam\Social')) {
-                File::put(app_path('Models/Callcocam/Social.php'), file_get_contents(__DIR__ . '/stubs/social-model.stub'));
-            }
-            if (!class_exists('App\Models\Callcocam\Image')) {
-                File::put(app_path('Models/Callcocam/Image.php'), file_get_contents(__DIR__ . '/stubs/image-model.stub'));
-            }
-
-            $this->info('Tenant model created successfully.');
-            $this->info('Please enable the tenant in config/tenant.php');
-            $this->info('Please run "php artisan app:tenant-install" to continue');
-            return true;
-        }
+    
         if (!config('tenant.enabled')) {
             $this->error('Please enable the tenant in config/tenant.php');
             $this->error('Please run "php artisan app:acl-tenant-install" to continue');
