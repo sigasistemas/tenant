@@ -30,6 +30,8 @@ class TenantServiceProvider extends PackageServiceProvider
 
     public static string $viewNamespace = 'tenant';
 
+    protected $tenant;
+
     public function configurePackage(Package $package): void
     {
         /*
@@ -173,7 +175,9 @@ class TenantServiceProvider extends PackageServiceProvider
 
         try {
             if (config('tenant.user', false)) {
-                $this->tenant = Tenant::query()->where('user_id', auth()->user()->id)->first();
+                if(auth()->check()){
+                    $this->tenant = Tenant::query()->where('user_id', auth()->user()->id)->first();
+                }
             } else {
                 $this->tenant = Tenant::query()->where('domain', str_replace("admin.", "", request()->getHost()))->first();
                 if (!$this->tenant) :

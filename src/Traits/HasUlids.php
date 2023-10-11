@@ -40,7 +40,7 @@ trait HasUlids
      */
     public function newUniqueId()
     {
-        if(config('tenant.uuid')){
+        if (config('tenant.uuid')) {
             return strtolower((string) Str::uuid());
         }
         return strtolower((string) Str::ulid());
@@ -58,12 +58,22 @@ trait HasUlids
      */
     public function resolveRouteBindingQuery($query, $value, $field = null)
     {
-        if ($field && in_array($field, $this->uniqueIds()) && ! Str::isUlid($value)) {
-            throw (new ModelNotFoundException)->setModel(get_class($this), $value);
-        }
+        if (config('acl.uuid')) {
+            if ($field && in_array($field, $this->uniqueIds()) && !Str::isUuid($value)) {
+                throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+            }
 
-        if (! $field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && ! Str::isUlid($value)) {
-            throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+            if (!$field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && !Str::isUuid($value)) {
+                throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+            }
+        } else {
+            if ($field && in_array($field, $this->uniqueIds()) && !Str::isUlid($value)) {
+                throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+            }
+
+            if (!$field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && !Str::isUlid($value)) {
+                throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+            }
         }
 
         return parent::resolveRouteBindingQuery($query, $value, $field);
