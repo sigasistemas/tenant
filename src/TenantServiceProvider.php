@@ -7,7 +7,7 @@
  */
 
 namespace Callcocam\Tenant;
- 
+
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -172,13 +172,16 @@ class TenantServiceProvider extends PackageServiceProvider
     {
 
         try {
-            $this->tenant = Tenant::query()->where('domain', str_replace("admin.", "", request()->getHost()))->first();
-            if (!$this->tenant) :
-                die(response("Nenhuma empresa cadastrada com esse endereço " . str_replace("admin.", "", request()->getHost()), 401));
-
-            endif;
-            FacadesTenant::addTenant("tenant_id", data_get($this->tenant, 'id'));
+            if (config('tenant.user', false)) {
+                $this->tenant = Tenant::query()->where('user_id', auth()->user()->id)->first();
+            } else {
+                $this->tenant = Tenant::query()->where('domain', str_replace("admin.", "", request()->getHost()))->first();
+                if (!$this->tenant) :
+                    die(response("Nenhuma empresa cadastrada com esse endereço " . str_replace("admin.", "", request()->getHost()), 401));
+                endif;
+            }
             if ($this->tenant) {
+                FacadesTenant::addTenant("tenant_id", data_get($this->tenant, 'id'));
                 config([
                     'app.tenant_id' => $this->tenant->id,
                     'app.name' => $this->tenant->name,
