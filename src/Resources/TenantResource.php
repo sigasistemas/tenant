@@ -154,35 +154,7 @@ class TenantResource extends Resource
                         ->maxLength(config('tenant.tenant.prefix.maxLength', 255));
                 }
                 if($extras = config('tenant.tenant.fields.extra', [])):
-                    foreach ($extras as $extra) {
-                        $content =  Forms\Components\Section::make(data_get($extra, 'name'))
-                            ->description(data_get($extra, 'description'))
-                            ->collapsed()
-                            ->schema(function () use ($extra){
-                                $contents_ = [];
-                                if($fields = data_get($extra, 'fields')){
-                                    foreach ($fields as $field) {
-                                        if($options = data_get($extra, 'options')):
-                                            $field->options(function () use($options){
-                                                if(is_string($options)){
-                                                    return app($options)->query()->pluck('name','id')->toArray();
-                                                }
-                                                if(is_array($options)){
-                                                    return $options;
-                                                }
-                                              return null;
-                                            });
-                                        endif;
-                                        $contents_[] = $field;
-                                    }
-                                }
-                                return $contents_;
-                            });
-                        if(data_get($extra, 'relationship')){
-                            $content->relationship(data_get($extra, 'relationship'));
-                        }
-                        $contents[] = $content;
-                    }
+                    $contents =  static::getExtraFieldsSchemaForm($extras, $contents );
                 endif;
 
 
@@ -279,5 +251,43 @@ class TenantResource extends Resource
                 return $callback($query);
             });
     }
-}
 
+    protected static function getExtraFieldsSchemaForm($extras, $contents=[]) {
+        foreach ($extras as $extra) {
+            $content =  Forms\Components\Section::make(data_get($extra, 'name'))
+                ->description(data_get($extra, 'description'))
+                ->collapsed()
+                ->schema(function () use ($extra){
+                    $contents_ = [];
+                    if($fields = data_get($extra, 'fields')){
+                        foreach ($fields as $class => $field) {
+                            $fieldForm = app($class,[
+                                'name'=> data_get($field,'name')
+                            ]);
+                            if($relationship = data_get($field, 'relationship')):
+                                $fieldForm->relationship($relationship);
+                            endif;
+                            if($options = data_get($extra, 'options')):
+                                $fieldForm->options(function () use($options){
+                                    if(is_string($options)){
+                                        return app($options)->query()->pluck('name','id')->toArray();
+                                    }
+                                    if(is_array($options)){
+                                        return $options;
+                                    }
+                                    return null;
+                                });
+                            endif;
+                            $contents_[] = $fieldForm;
+                        }
+                    }
+                    return $contents_;
+                });
+            if(data_get($extra, 'relationship')){
+                $content->relationship(data_get($extra, 'relationship'));
+            }
+            $contents[] = $content;
+        }
+        return  $contents;
+    }
+}
