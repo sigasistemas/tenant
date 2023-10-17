@@ -81,53 +81,71 @@ class TenantResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('type')
-                    ->label(__('tenant::tenant.forms.type.label'))
-                    ->placeholder(__('tenant::tenant.forms.type.placeholder'))
-                    ->options([
-                        'tenant' => 'Tenant',
-                        'landlord' => 'Landlord',
-                    ])
-                    ->columnSpan([
-                        'md' => 3,
-                    ])
-                    ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->label(__('tenant::tenant.forms.name.label'))
-                    ->placeholder(__('tenant::tenant.forms.name.placeholder'))
-                    ->columnSpan([
-                        'md' => 9,
-                    ])
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('domain')
-                    ->label(__('tenant::tenant.forms.domain.label'))
-                    ->placeholder(__('tenant::tenant.forms.domain.placeholder'))
-                    ->columnSpan([
-                        'md' => 6,
-                    ])
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('provider')
-                    ->label(__('tenant::tenant.forms.provider.label'))
-                    ->placeholder(__('tenant::tenant.forms.provider.placeholder'))
-                    ->columnSpan([
-                        'md' => 3,
-                    ])
-                    ->helperText(__('tenant::tenant.forms.provider.helperText'))
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('prefix')
-                    ->label(__('tenant::tenant.forms.prefix.label'))
-                    ->placeholder(__('tenant::tenant.forms.prefix.placeholder'))
-                    ->columnSpan([
-                        'md' => 3,
-                    ])
-                    ->helperText(__('tenant::tenant.forms.prefix.helperText'))
-                    ->maxLength(255),
-                static::getStatusFormRadioField(),
-                static::getEditorFormField()
-            ])->columns(12);
+            ->schema(function (){
+                $contents = [];
+
+                if(config('tenant.tenant.fields.type.visible', true)){
+                    $contents[] =  Forms\Components\Select::make('type')
+                        ->label(__('tenant::tenant.forms.type.label'))
+                        ->placeholder(__('tenant::tenant.forms.type.placeholder'))
+                        ->options([
+                            'tenant' => 'Tenant',
+                            'landlord' => 'Landlord',
+                        ])
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.prefix.span', 3),
+                        ])
+                        ->required();
+                }
+                if(config('tenant.tenant.fields.name.visible', true)){
+                    $contents[] = Forms\Components\TextInput::make('name')
+                        ->label(__('tenant::tenant.forms.name.label'))
+                        ->placeholder(__('tenant::tenant.forms.name.placeholder'))
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.prefix.span', 9),
+                        ])
+                        ->required()
+                        ->maxLength(255);
+                }
+
+                if(config('tenant.tenant.fields.domain.visible', true)){
+                    $contents[] = Forms\Components\TextInput::make('domain')
+                        ->label(__('tenant::tenant.forms.domain.label'))
+                        ->placeholder(__('tenant::tenant.forms.domain.placeholder'))
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.prefix.span', 6),
+                        ])
+                        ->required()
+                        ->maxLength(255);
+                }
+
+                if(config('tenant.tenant.fields.provider.visible', true)){
+                    $contents[] = Forms\Components\TextInput::make('provider')
+                        ->label(__('tenant::tenant.forms.provider.label'))
+                        ->placeholder(__('tenant::tenant.forms.provider.placeholder'))
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.prefix.span', 3),
+                        ])
+                        ->helperText(__('tenant::tenant.forms.provider.helperText'))
+                        ->maxLength(255);
+                }
+
+                if(config('tenant.tenant.fields.prefix.visible', true)){
+                    $contents[] = Forms\Components\TextInput::make('prefix')
+                        ->label(__('tenant::tenant.forms.prefix.label'))
+                        ->placeholder(__('tenant::tenant.forms.prefix.placeholder'))
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.prefix.span', 3),
+                        ])
+                        ->helperText(__('tenant::tenant.forms.prefix.helperText'))
+                        ->maxLength(255);
+                }
+                $contents[] =  static::getStatusFormRadioField();
+                $contents[] = static::getEditorFormField();
+
+                return $contents;
+
+            })->columns(12);
     }
 
     public static function table(Table $table): Table
@@ -135,19 +153,28 @@ class TenantResource extends Resource
         return $table
             ->modelLabel(__('tenant::tenant.modelLabel'))
             ->pluralModelLabel(__('tenant::tenant.pluralModelLabel'))
-            ->columns([
-                Tables\Columns\TextColumn::make('type')
-                    ->label(__('tenant::tenant.forms.type.label'))
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->label(__('tenant::tenant.forms.name.label'))
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('domain')
-                    ->label(__('tenant::tenant.forms.domain.label'))
-                    ->searchable(),
-                static::getStatusTableIconColumn(),
-                ...static::getFieldDatesFormForTable()
-            ])
+            ->columns(function (){
+                $contents = [];
+                if(config('tenant.tenant.fields.type.visible', true)) {
+                    $contents[] = Tables\Columns\TextColumn::make('type')
+                        ->label(__('tenant::tenant.forms.type.label'))
+                        ->searchable();
+                }
+
+                if(config('tenant.tenant.fields.name.visible', true)) {
+                    $contents[] = Tables\Columns\TextColumn::make('name')
+                        ->label(__('tenant::tenant.forms.name.label'))
+                        ->searchable();
+                }
+                if(config('tenant.tenant.fields.domain.visible', true)) {
+                    $contents[] = Tables\Columns\TextColumn::make('domain')
+                        ->label(__('tenant::tenant.forms.domain.label'))
+                        ->searchable();
+                }
+                $contents[] = static::getStatusTableIconColumn();
+                $contents[] = [...static::getFieldDatesFormForTable()];
+                return $contents;
+            })
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -186,7 +213,7 @@ class TenantResource extends Resource
             $relations[] = RelationManagers\SocialsRelationManager::class;
         }
 
-        return config('tenant.relations.tenant', [...$relations]);
+        return array_merge($relations, config('tenant.relations.tenant', [])) ;
     }
 
     public static function getPages(): array
