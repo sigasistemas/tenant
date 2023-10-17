@@ -172,7 +172,7 @@ class TenantResource extends Resource
                         ->searchable();
                 }
                 $contents[] = static::getStatusTableIconColumn();
-                $contents[] = [...static::getFieldDatesFormForTable()];
+//                $contents[] = [...static::getFieldDatesFormForTable()];
                 return $contents;
             })
             ->filters([
