@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('type', ['tenant', 'subtenant'])->default('tenant')->comment('Tipo do tenant, se é um tenant ou subtenant');
             $table->string('name', 255)->comment('Razão social do tenant');
             $table->string('slug')->nullable()->unique();
-            $table->string('email')->unique()->comment('Email do tenant');
+            $table->string('email')->nullable()->unique()->comment('Email do tenant');
             $table->string('domain')->unique()->comment('Domínio do tenant');
             $table->string('provider')->nullable()->comment('Conexão do tenant, qual base de dados ele vai usar');
             $table->string('prefix')->nullable()->comment('Path para acessar o tenant, ex: http://dominio/tenant');

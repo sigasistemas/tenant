@@ -88,24 +88,34 @@ class TenantResource extends Resource
                     $contents[] =  Forms\Components\Select::make('type')
                         ->label(__('tenant::tenant.forms.type.label'))
                         ->placeholder(__('tenant::tenant.forms.type.placeholder'))
-                        ->options([
+                        ->options(config('tenant.tenant.type.options', [
                             'tenant' => 'Tenant',
                             'landlord' => 'Landlord',
-                        ])
+                        ]))
                         ->columnSpan([
-                            'md' => config('tenant.tenant.prefix.span', 3),
+                            'md' => config('tenant.tenant.type.span', 2),
                         ])
-                        ->required();
+                        ->required(config('tenant.tenant.type.required', false));
                 }
                 if(config('tenant.tenant.fields.name.visible', true)){
                     $contents[] = Forms\Components\TextInput::make('name')
                         ->label(__('tenant::tenant.forms.name.label'))
                         ->placeholder(__('tenant::tenant.forms.name.placeholder'))
                         ->columnSpan([
-                            'md' => config('tenant.tenant.prefix.span', 9),
+                            'md' => config('tenant.tenant.name.span', 6),
                         ])
-                        ->required()
-                        ->maxLength(255);
+                        ->required(config('tenant.tenant.name.required', false))
+                        ->maxLength(config('tenant.tenant.name.maxLength', 255));
+                }
+                if(config('tenant.tenant.fields.email.visible', true)){
+                    $contents[] = Forms\Components\TextInput::make('email')
+                        ->label(__('tenant::tenant.forms.email.label'))
+                        ->placeholder(__('tenant::tenant.forms.email.placeholder'))
+                        ->columnSpan([
+                            'md' => config('tenant.tenant.email.span', 4),
+                        ])
+                        ->required(config('tenant.tenant.email.required', false))
+                        ->maxLength(config('tenant.tenant.email.maxLength', 255));
                 }
 
                 if(config('tenant.tenant.fields.domain.visible', true)){
@@ -113,10 +123,10 @@ class TenantResource extends Resource
                         ->label(__('tenant::tenant.forms.domain.label'))
                         ->placeholder(__('tenant::tenant.forms.domain.placeholder'))
                         ->columnSpan([
-                            'md' => config('tenant.tenant.prefix.span', 6),
+                            'md' => config('tenant.tenant.domain.span', 6),
                         ])
-                        ->required()
-                        ->maxLength(255);
+                        ->required(config('tenant.tenant.domain.required', false))
+                        ->maxLength(config('tenant.tenant.domain.maxLength', 255));
                 }
 
                 if(config('tenant.tenant.fields.provider.visible', true)){
@@ -124,10 +134,11 @@ class TenantResource extends Resource
                         ->label(__('tenant::tenant.forms.provider.label'))
                         ->placeholder(__('tenant::tenant.forms.provider.placeholder'))
                         ->columnSpan([
-                            'md' => config('tenant.tenant.prefix.span', 3),
+                            'md' => config('tenant.tenant.provider.span', 3),
                         ])
+                        ->required(config('tenant.tenant.provider.required', false))
                         ->helperText(__('tenant::tenant.forms.provider.helperText'))
-                        ->maxLength(255);
+                        ->maxLength(config('tenant.tenant.provider.maxLength', 255));
                 }
 
                 if(config('tenant.tenant.fields.prefix.visible', true)){
@@ -137,8 +148,9 @@ class TenantResource extends Resource
                         ->columnSpan([
                             'md' => config('tenant.tenant.prefix.span', 3),
                         ])
+                        ->required(config('tenant.tenant.prefix.required', false))
                         ->helperText(__('tenant::tenant.forms.prefix.helperText'))
-                        ->maxLength(255);
+                        ->maxLength(config('tenant.tenant.prefix.maxLength', 255));
                 }
                 $contents[] =  static::getStatusFormRadioField();
                 $contents[] = static::getEditorFormField();
