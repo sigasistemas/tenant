@@ -245,20 +245,20 @@ class TenantResource extends Resource
 
         $relations = [];
 
-        if (config('tenant.relations.tenant.address',  true)) {
+        if (config('tenant.relations.tenant.address.active',  true)) {
             $relations[] = RelationManagers\AddressesRelationManager::class;
         }
-        if (config('tenant.relations.tenant.contact',  true)) {
+        if (config('tenant.relations.tenant.contact.active',  true)) {
             $relations[] = RelationManagers\ContactsRelationManager::class;
         }
-        if (config('tenant.relations.tenant.document',  true)) {
+        if (config('tenant.relations.tenant.document.active',  true)) {
             $relations[] = RelationManagers\DocumentsRelationManager::class;
         }
-        if (config('tenant.relations.tenant.social',  true)) {
+        if (config('tenant.relations.tenant.social.active',  true)) {
             $relations[] = RelationManagers\SocialsRelationManager::class;
         }
 
-        return array_merge($relations, config('tenant.relations.tenant', [])) ;
+        return array_merge($relations, config('tenant.relations.tenant.relationships', [])) ;
     }
 
     public static function getPages(): array
@@ -280,3 +280,4 @@ class TenantResource extends Resource
             });
     }
 }
+
