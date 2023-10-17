@@ -11,6 +11,10 @@ return [
             'label' => 'Name',
             'placeholder' => 'Enter the name',
         ],
+        'email' => [
+            'label' => 'E-Mail',
+            'placeholder' => 'Enter the email',
+        ],
         'domain' => [
             'label' => 'Domain',
             'placeholder' => 'Enter the domain',
