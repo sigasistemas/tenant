@@ -9,6 +9,9 @@
 namespace Callcocam\Tenant\Resources\TenantResource\Pages;
 
 use Callcocam\Tenant\Resources\TenantResource;
+use Callcocam\Tenant\Traits\HasDatesFormForTableColums;
+use Callcocam\Tenant\Traits\HasEditorColumn;
+use Callcocam\Tenant\Traits\HasStatusColumn;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Forms;
@@ -16,6 +19,8 @@ use Filament\Forms\Form;
 
 class EditTenant extends EditRecord
 {
+    use HasStatusColumn, HasEditorColumn, HasDatesFormForTableColums;
+    
     protected static string $resource = TenantResource::class;
 
     protected function getHeaderActions(): array
