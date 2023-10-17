@@ -150,31 +150,30 @@ class TenantResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $contents = [];
+        if(config('tenant.tenant.fields.type.visible', true)) {
+            $contents[] = Tables\Columns\TextColumn::make('type')
+                ->label(__('tenant::tenant.forms.type.label'))
+                ->searchable();
+        }
+
+        if(config('tenant.tenant.fields.name.visible', true)) {
+            $contents[] = Tables\Columns\TextColumn::make('name')
+                ->label(__('tenant::tenant.forms.name.label'))
+                ->searchable();
+        }
+        if(config('tenant.tenant.fields.domain.visible', true)) {
+            $contents[] = Tables\Columns\TextColumn::make('domain')
+                ->label(__('tenant::tenant.forms.domain.label'))
+                ->searchable();
+        }
+        $contents[] = static::getStatusTableIconColumn();
+        $contents = array_merge($contents, static::getFieldDatesFormForTable());
+
         return $table
             ->modelLabel(__('tenant::tenant.modelLabel'))
             ->pluralModelLabel(__('tenant::tenant.pluralModelLabel'))
-            ->columns(function (){
-                $contents = [];
-                if(config('tenant.tenant.fields.type.visible', true)) {
-                    $contents[] = Tables\Columns\TextColumn::make('type')
-                        ->label(__('tenant::tenant.forms.type.label'))
-                        ->searchable();
-                }
-
-                if(config('tenant.tenant.fields.name.visible', true)) {
-                    $contents[] = Tables\Columns\TextColumn::make('name')
-                        ->label(__('tenant::tenant.forms.name.label'))
-                        ->searchable();
-                }
-                if(config('tenant.tenant.fields.domain.visible', true)) {
-                    $contents[] = Tables\Columns\TextColumn::make('domain')
-                        ->label(__('tenant::tenant.forms.domain.label'))
-                        ->searchable();
-                }
-                $contents[] = static::getStatusTableIconColumn();
-//                $contents[] = [...static::getFieldDatesFormForTable()];
-                return $contents;
-            })
+            ->columns($contents)
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
