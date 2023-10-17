@@ -20,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
@@ -152,6 +153,39 @@ class TenantResource extends Resource
                         ->helperText(__('tenant::tenant.forms.prefix.helperText'))
                         ->maxLength(config('tenant.tenant.prefix.maxLength', 255));
                 }
+                if($extras = config('tenant.tenant.fields.extra', [])):
+                    foreach ($extras as $extra) {
+                        $content =  Forms\Components\Section::make(data_get($extra, 'name'))
+                            ->description(data_get($extra, 'description'))
+                            ->collapsed()
+                            ->schema(function () use ($extra){
+                                $contents_ = [];
+                                if($fields = data_get($extra, 'fields')){
+                                    foreach ($fields as $field) {
+                                        if($options = data_get($extra, 'options')):
+                                            $field->options(function () use($options){
+                                                if(is_string($options)){
+                                                    return app($options)->query()->pluck('name','id')->toArray();
+                                                }
+                                                if(is_array($options)){
+                                                    return $options;
+                                                }
+                                              return null;
+                                            });
+                                        endif;
+                                        $contents_[] = $field;
+                                    }
+                                }
+                                return $contents_;
+                            });
+                        if(data_get($extra, 'relationship')){
+                            $content->relationship(data_get($extra, 'relationship'));
+                        }
+                        $contents[] = $content;
+                    }
+                endif;
+
+
                 $contents[] =  static::getStatusFormRadioField();
                 $contents[] = static::getEditorFormField();
 
