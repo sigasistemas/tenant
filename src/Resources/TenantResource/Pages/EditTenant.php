@@ -105,9 +105,7 @@ class EditTenant extends EditRecord
                         ->helperText(__('tenant::tenant.forms.prefix.helperText'))
                         ->maxLength(config('tenant.tenant.prefix.maxLength', 255));
                 }
-                if ($extras = config('tenant.tenant.fields.extra', [])) :
-                    $contents =  static::getExtraFieldsSchemaForm($extras, $contents);
-                endif;
+                $contents =  static::getExtraFieldsSchemaForm($this->record, $contents);
 
 
                 $contents[] =  static::getStatusFormRadioField();
@@ -129,32 +127,12 @@ class EditTenant extends EditRecord
                         ->schema(function () use ($extra){
                             $contents_ = [];
                             if($fields = data_get($extra, 'fields')){
-                                foreach ($fields as $class => $field) {
-                                    $fieldForm = app($class,[
-                                        'name'=> data_get($field,'name')
-                                    ]);
-                                    if($relationship = data_get($field, 'relationship')):
-                                        $fieldForm->relationship($relationship);
-                                    endif;
-                                    if($options = data_get($extra, 'options')):
-                                        $fieldForm->options(function () use($options){
-                                            if(is_string($options)){
-                                                return app($options)->query()->pluck('name','id')->toArray();
-                                            }
-                                            if(is_array($options)){
-                                                return $options;
-                                            }
-                                            return null;
-                                        });
-                                    endif;
-                                    $contents_[] = $fieldForm;
+                                foreach ($fields as $class => $field) { 
+                                    $contents_[] = $field;
                                 }
                             }
                             return $contents_;
-                        });
-                    if(data_get($extra, 'relationship')){
-                        $content->relationship(data_get($extra, 'relationship'));
-                    }
+                        }); 
                     $contents[] = $content;
                 }
             }
