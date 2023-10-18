@@ -145,6 +145,11 @@ class TenantResource extends Resource
             $relations[] = RelationManagers\SocialsRelationManager::class;
         }
 
+        if(class_exists('App\Core\Helpers\TenantHelper')){
+            if(method_exists(app('App\Core\Helpers\TenantHelper'), 'getExtraRelationManager')){
+                $relations = array_merge($relations, app('App\Core\Helpers\TenantHelper')->getExtraRelationManager()); 
+            }   
+        }
         return array_merge($relations, config('tenant.relations.tenant.relationships', [])) ;
     }
 
