@@ -119,7 +119,7 @@ class EditTenant extends EditRecord
 
     protected static function getExtraFieldsSchemaForm($record,  $contents=[]) {
 
-        if(class_exists('App\Core\Helpers\TenantHellper')){
+        if(class_exists('App\Core\Helpers\TenantHelper')){
             if(method_exists(app('App\Core\Helpers\TenantHelper'), 'getExtrafileds')){
                 $extras = app('App\Core\Helpers\TenantHelper')->getExtrafileds($record);
                 foreach ($extras as $extra) {
