@@ -167,9 +167,7 @@ class TenantResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes(config('tenant.scopes.tenant', [
                 SoftDeletingScope::class,
-            ]))->when(config('tenant.query.tenant', []), function ($query, $callback) {
-                return $callback($query);
-            });
+            ]))->tenant();
     }
 
    
