@@ -175,11 +175,11 @@ class TenantServiceProvider extends PackageServiceProvider
 
         try {
             if (config('tenant.user', false)) {
-                if(auth()->check()){
-                    $this->tenant = Tenant::query()->where('user_id', auth()->user()->id)->first();
+                if (auth()->check()) {
+                    $this->tenant = app($this->getModel())->query()->where('user_id', auth()->user()->id)->first();
                 }
             } else {
-                $this->tenant = Tenant::query()->where('domain', str_replace("admin.", "", request()->getHost()))->first();
+                $this->tenant = app($this->getModel())->query()->where('domain', str_replace("admin.", "", request()->getHost()))->first();
                 if (!$this->tenant) :
                     die(response("Nenhuma empresa cadastrada com esse endereço " . str_replace("admin.", "", request()->getHost()), 401));
                 endif;
@@ -196,5 +196,10 @@ class TenantServiceProvider extends PackageServiceProvider
 
             throw $th;
         }
+    }
+
+    public  function getModel(): string
+    {
+        return config('tenant.models.tenant', Tenant::class);
     }
 }
