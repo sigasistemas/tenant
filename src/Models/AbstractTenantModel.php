@@ -20,6 +20,8 @@ class AbstractTenantModel extends Model
 
     public function __construct(array $attributes = [])
     {
+        $this->connection = config('profile.connection', 'mysql');
+        
         $this->incrementing = config('tenant.incrementing', true);
 
         $this->keyType = config('tenant.keyType', 'int');
