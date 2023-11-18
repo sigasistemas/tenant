@@ -17,7 +17,7 @@ return new class extends Migration
             } else {
                 $table->ulid('id')->primary();
             }
-            $table->enum('type', ['tenant', 'subtenant'])->default('tenant')->comment('Tipo do tenant, se é um tenant ou subtenant');
+            $table->enum('type', ['tenant', 'landlord'])->default('tenant')->comment('Tipo do tenant, se é um tenant ou subtenant');
             $table->string('name', 255)->comment('Razão social do tenant');
             $table->string('slug')->nullable()->unique();
             $table->string('email')->nullable()->unique()->comment('Email do tenant');

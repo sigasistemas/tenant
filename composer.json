@@ -30,6 +30,7 @@
         "spatie/laravel-package-tools": "^1.15.0",
         "illuminate/contracts": "^10.0",
         "leandrocfe/filament-ptbr-form-fields": "^3.0",
+        "doctrine/dbal": "^3.7",
         "owenvoke/blade-fontawesome": "^2.4"
     },
     "require-dev": {
