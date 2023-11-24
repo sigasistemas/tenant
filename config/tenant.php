@@ -28,4 +28,17 @@ return [
 
     'keyType' => 'string',
 
+    'connection' => 'mysql',
+
+    'route' => [
+        'prefix' => 'admin', 
+    ],
+    // 'navigation' => [
+    //     'tenant' => [
+    //         'group' => "Operacional",
+    //         'icon' => null,
+    //         'label' => 'Controle de Acesso',
+    //         'badge' => null,
+    //     ],
+    // ],
 ];

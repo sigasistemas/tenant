@@ -47,23 +47,23 @@ class TenantResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('acl.navigation.tenant.group', static::$navigationGroup);
+        return config('tenant.navigation.tenant.group', static::$navigationGroup);
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return config('acl.navigation.tenant.icon', static::$navigationIcon);
+        return config('tenant.navigation.tenant.icon', static::$navigationIcon);
     }
 
     public static function getNavigationLabel(): string
     {
-        return static::$navigationLabel ?? config('acl.navigation.tenant.label', Str::headline(static::getPluralModelLabel()));
+        return static::$navigationLabel ?? config('tenant.navigation.tenant.label', Str::headline(static::getPluralModelLabel()));
     }
 
 
     public static function getNavigationBadge(): ?string
     {
-        return config('acl.navigation.tenant.badge', null);
+        return config('tenant.navigation.tenant.badge', null);
     }
 
     /**
@@ -71,12 +71,12 @@ class TenantResource extends Resource
      */
     public static function getNavigationBadgeColor(): string | array | null
     {
-        return config('acl.navigation.tenant.badge_color', null);
+        return config('tenant.navigation.tenant.badge_color', null);
     }
 
     public static function getNavigationSort(): ?int
     {
-        return config('acl.navigation.tenant.sort', static::$navigationSort);
+        return config('tenant.navigation.tenant.sort', static::$navigationSort);
     }
 
     
