@@ -23,6 +23,7 @@ use Callcocam\Tenant\Commands\TenantCommand;
 use Callcocam\Tenant\Facades\Tenant as FacadesTenant;
 use Callcocam\Tenant\Models\Tenant;
 use Callcocam\Tenant\Testing\TestsTenant;
+use Illuminate\Support\Str;
 
 class TenantServiceProvider extends PackageServiceProvider
 {
@@ -188,7 +189,7 @@ class TenantServiceProvider extends PackageServiceProvider
                 FacadesTenant::addTenant("tenant_id", data_get($this->tenant, 'id'));
                 config([
                     'app.tenant_id' => $this->tenant->id,
-                    'app.name' => $this->tenant->name,
+                    'app.name' => Str::limit($this->tenant->name, 20, '...'),
                     'app.tenant' => $this->tenant->toArray(),
                 ]);
             }
